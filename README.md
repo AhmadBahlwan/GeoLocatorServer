@@ -34,21 +34,18 @@ Before you begin, ensure you have the following prerequisites installed on your 
 3. Create database with name geolocator :
 
 
-4. Create database with name geolocator and customize application properties:
+4. modify these properties in application.properties file as below :
 
    ```bash
-   spring.datasource.url=jdbc:postgresql://localhost:5432/geolocator
+   spring.datasource.url=jdbc:postgresql://${database-host}:${database-port}/geolocator
    spring.datasource.username={your user name}
    spring.datasource.password={your password}
-
-   spring.jpa.hibernate.ddl-auto=update
-   spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialec
   
 
 5. Run the project:
 
    ```bash
-   mvn spring-boot:run
+   mvn spring-boot:run -Dallowed.origins="${frontend app link}" -Dgeocode.api.url="https://geocode.search.hereapi.com/v1/geocode?lang=en&apiKey=${you api key}" -DEMAIL_USERNAME="${your email}" -DEMAIL_PASSWORD="${you email password}"
 
 
 ## Now You can access the api using the link

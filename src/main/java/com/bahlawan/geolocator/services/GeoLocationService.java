@@ -6,6 +6,7 @@ import com.bahlawan.geolocator.repositories.GeoLocationRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.micrometer.common.util.StringUtils;
 import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,7 @@ import java.util.List;
 @Service
 public class GeoLocationService {
 
-    @Value("${geocode.api.url}")
+    @Value("${GEO_CODE_API_URL}")
     private String API;
     private final GeoLocationRepository geoLocationRepository;
     private final WebClient.Builder webClient;
@@ -55,8 +56,8 @@ public class GeoLocationService {
     }
 
     private void sendEmailIfRequested(UserRequest request, List<GeoLocation> locations) throws MessagingException, UnsupportedEncodingException {
-        if (request.email() != null) {
-            emailService.sendMail(locations);
+        if (!StringUtils.isEmpty(request.email())) {
+            emailService.sendMail(request.email(), locations);
         }
     }
 
@@ -80,14 +81,7 @@ public class GeoLocationService {
             for (JsonNode itemNode : itemsNode) {
                 JsonNode addressNode = itemNode.path("address");
                 GeoLocation geoLocation = new GeoLocation();
-
                 geoLocation.setAddress(addressNode.path("label").asText());
-                geoLocation.setCountry(addressNode.path("countryName").asText());
-                // Check if city exists before accessing
-                if (addressNode.has("city")) {
-                    geoLocation.setCity(addressNode.path("city").asText());
-                }
-                geoLocation.setPostalCode(addressNode.path("postalCode").asText());
                 geoLocation.setLatitude(itemNode.path("position").path("lat").asDouble());
                 geoLocation.setLongitude(itemNode.path("position").path("lng").asDouble());
 
