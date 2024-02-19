@@ -54,3 +54,14 @@ Before you begin, ensure you have the following prerequisites installed on your 
   "address": "an address",
   "email": "an email"
   }
+
+
+## Deployment
+<li>AWS ElasticBeanstalk</li>
+
+## You can try it on this link
+- http://geo-locator.us-east-1.elasticbeanstalk.com/geolocation/api/v1/submit-address
+- request body: {
+  "address": "an address",
+  "email": "an email"
+  }
